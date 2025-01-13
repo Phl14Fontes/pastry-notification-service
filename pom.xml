@@ -12,7 +12,7 @@
 	<artifactId>notification-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>notification-service</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Responsible for internal notification of orders</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -53,16 +53,13 @@
 			<version>3.1.2</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<!-- LOMBOK -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.36</version>
 			<scope>provided</scope>
 		</dependency>
-
-
-
 	</dependencies>
 
 	<build>
