@@ -36,13 +36,13 @@ public class SendNotificationAdapter implements SendNotificationPort {
                     entity,
                     String.class
             );
-            if (response.getStatusCodeValue() == 200) {
+            if (response != null && response.getStatusCodeValue() == 200) {
                 System.out.println("Notification sent successfully!");
-            } else {
+            } else if (response != null) {
                 System.out.println("Failed to send notification. Response code: " + response.getStatusCodeValue());
             }
         } catch (HttpStatusCodeException e) {
-            e.getMessage();
+            System.out.println("Exception during sending notification: " + e.getMessage());
         }
     }
 }
