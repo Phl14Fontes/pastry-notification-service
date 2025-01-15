@@ -1,27 +1,26 @@
-package com.mba.notificationservice.application.usecase;
+package com.mba.notificationservice.infrastructure.adapter.out.rest;
 
-import com.mba.notificationservice.domain.model.Notification;
-import lombok.RequiredArgsConstructor;
+import com.mba.notificationservice.application.port.SendNotificationPort;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 
-@Service
-@RequiredArgsConstructor
-public class SendNotificationUseCaseImpl implements SendNotificationUseCase {
+@Component
+public class SendNotificationAdapter implements SendNotificationPort {
 
-    @Value(value = "${teams.webhook.address}")
+    @Value(value = "${teams.webhook.url}")
     private String webhookUrl;
 
     RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public void sendNotification(Notification notification) {
-
+    public void sendNotificationToTeamsWebhook(String teamsWebhook) {
         var body = new HashMap<String, String>();
         body.put("@type", "MessageCard" );
         body.put("@context", "http://schema.org/extensions" );
@@ -38,9 +37,9 @@ public class SendNotificationUseCaseImpl implements SendNotificationUseCase {
                     String.class
             );
             if (response.getStatusCodeValue() == 200) {
-                System.out.println("Mensagem enviada com sucesso!");
+                System.out.println("Notification sent successfully!");
             } else {
-                System.out.println("Falha ao enviar a mensagem. Código de resposta: " + response.getStatusCodeValue());
+                System.out.println("Failed to send notification. Response code: " + response.getStatusCodeValue());
             }
         } catch (HttpStatusCodeException e) {
             e.getMessage();
