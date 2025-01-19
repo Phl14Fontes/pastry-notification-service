@@ -1,0 +1,46 @@
+name: Java CD - Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+          distribution: 'adoptopenjdk'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Run tests with Maven
+        run: mvn test
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-artifact
+          path: target/*.jar
+
+#      - name: Deploy to remote server
+#        run: |
+#          scp -i ${{ secrets.SSH_PRIVATE_KEY }} target/*.jar user@your-server:/path/to/deploy
+#          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} user@your-server 'java -jar /path/to/deploy/app.jar &'
