@@ -20,6 +20,7 @@ public class NotificationConsumerAdapter implements NotificationConsumerPort {
     @KafkaListener(topics = "${topic.name.consumer}", groupId = "notification-service")
     @Override
     public void listenNotification(String message) {
+        System.out.println("Received notification: " + message);
         var notification = Notification.builder()
                 .message(message)
                 .build();
